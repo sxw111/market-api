@@ -26,6 +26,7 @@ async def get_products(
     max_price: float | None = Query(None, description="Max price"),
     category_ids: list[int] | None = Query(None, description="Categories list"),
 ) -> Any:
+    """Retrieve products with optional filters for price and categories."""
     products = await get_all(
         db_session=db_session,
         min_price=min_price,
@@ -43,6 +44,7 @@ async def get_products(
 
 @router.get("/{product_id}", response_model=ProductRead)
 async def get_product(db_session: SessionDep, product_id: int) -> Any:
+    """Retrieve a single product by its ID."""
     product = await get(db_session=db_session, product_id=product_id)
     if not product:
         raise HTTPException(
@@ -59,6 +61,7 @@ async def get_product(db_session: SessionDep, product_id: int) -> Any:
     status_code=status.HTTP_200_OK,
 )
 async def get_by_category(db_session: SessionDep, category_id: int) -> Any:
+    """Retrieve products by category ID."""
     category = await get_category(db_session=db_session, category_id=category_id)
     if not category:
         raise HTTPException(
@@ -84,6 +87,7 @@ async def create_product(
     db_session: SessionDep,
     product_in: ProductCreate,
 ) -> Any:
+    """Create a new product."""
     product = await get_by_name(db_session=db_session, product_name=product_in.name)
     if product:
         raise HTTPException(
@@ -111,6 +115,7 @@ async def update_product(
     product_id: int,
     product_in: ProductUpdate,
 ) -> Any:
+    """Update an existing product by ID."""
     product = await get(db_session=db_session, product_id=product_id)
     if not product:
         raise HTTPException(
@@ -145,6 +150,7 @@ async def update_product(
 
 @router.delete("/{product_id}", response_model=None)
 async def delete_product(db_session: SessionDep, product_id: int) -> None:
+    """Delete a product by ID."""
     product = await get(db_session=db_session, product_id=product_id)
     if not product:
         raise HTTPException(

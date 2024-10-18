@@ -14,12 +14,14 @@ router = APIRouter()
 @router.get("/", response_model=list[CategoryRead])
 @cache(expire=3600)
 async def get_categories(db_session: SessionDep) -> Any:
+    """Return all categories in the database."""
     return await get_all(db_session=db_session)
 
 
 @router.get("/{category_id}", response_model=CategoryRead)
 @cache(expire=3600)
 async def get_category(db_session: SessionDep, category_id: int) -> Any:
+    """Retrieve information about a category by its ID."""
     category = await get(db_session=db_session, category_id=category_id)
     if not category:
         raise HTTPException(
@@ -35,6 +37,7 @@ async def create_category(
     db_session: SessionDep,
     category_in: CategoryCreate,
 ) -> Any:
+    """Create a new category."""
     category = await get_by_name(db_session=db_session, category_name=category_in.name)
     if category:
         raise HTTPException(
@@ -53,6 +56,7 @@ async def update_category(
     category_id: int,
     category_in: CategoryUpdate,
 ) -> Any:
+    """Update a category."""
     category = await get(db_session=db_session, category_id=category_id)
     if not category:
         raise HTTPException(
@@ -68,6 +72,7 @@ async def update_category(
 
 @router.delete("/{category_id}", response_model=None)
 async def delete_category(db_session: SessionDep, category_id: int) -> None:
+    """Delete a category."""
     category = await get(db_session=db_session, category_id=category_id)
     if not category:
         raise HTTPException(

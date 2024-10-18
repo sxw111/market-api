@@ -5,6 +5,7 @@ from .models import Category, CategoryCreate, CategoryUpdate
 
 
 async def get(*, db_session: AsyncSession, category_id: int) -> Category | None:
+    """Returns a category based on the given id."""
     result = await db_session.execute(
         select(Category).where(Category.id == category_id)
     )
@@ -15,6 +16,7 @@ async def get(*, db_session: AsyncSession, category_id: int) -> Category | None:
 async def get_by_name(
     *, db_session: AsyncSession, category_name: str
 ) -> Category | None:
+    """Returns a category by its name."""
     result = await db_session.execute(
         select(Category).where(Category.name == category_name)
     )
@@ -23,12 +25,14 @@ async def get_by_name(
 
 
 async def get_all(*, db_session: AsyncSession) -> list[Category]:
+    """Return all categories."""
     result = await db_session.execute(select(Category))
 
     return result.scalars().all()  # type: ignore
 
 
 async def create(*, db_session: AsyncSession, category_in: CategoryCreate) -> Category:
+    """Creates a new category."""
     category = Category(**category_in.model_dump())
 
     db_session.add(category)
@@ -41,6 +45,7 @@ async def create(*, db_session: AsyncSession, category_in: CategoryCreate) -> Ca
 async def update(
     *, db_session: AsyncSession, category: Category, category_in: CategoryUpdate
 ) -> Category:
+    """Updates a category."""
     category_data = category.dict()
     update_data = category_in.model_dump(exclude_unset=True)
     for field in category_data:
@@ -54,6 +59,7 @@ async def update(
 
 
 async def delete(*, db_session: AsyncSession, category_id: int) -> None:
+    """Deletes an existing category."""
     result = await db_session.execute(
         select(Category).where(Category.id == category_id)
     )
