@@ -1,0 +1,72 @@
+[tool.poetry]
+name = "market-api"
+version = "0.0.1"
+description = ""
+authors = ["sxw111 <sxw9sxw@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.115.2"
+uvicorn = {version = "^0.32.0", extras = ["standart"]}
+sqlalchemy = "^2.0.36"
+pydantic-settings = "^2.6.0"
+python-jose = {version = "^3.3.0", extras = ["cryptography"]}
+passlib = "^1.7.4"
+alembic = "^1.13.3"
+asyncpg = "^0.29.0"
+pydantic = {version = "^2.9.2", extras = ["email"]}
+fastapi-cache2 = {version = "^0.2.2", extras = ["redis"]}
+python-multipart = "^0.0.12"
+bcrypt = "4.0.1"
+httpx = "^0.27.2"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.1"
+mypy = "^1.12.0"
+black = "^24.10.0"
+isort = "^5.13.2"
+pre-commit = "^4.0.1"
+types-redis = "^4.6.0.20241004"
+types-python-jose = "^3.3.4.20240106"
+types-passlib = "^1.7.7.20240819"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+color=true
+exclude = '''
+    /(
+        \.git
+        | \.mypy_cache
+        | \.venv
+        | migrations/versions
+    )/
+'''
+include = '\.pyi?$'
+line-length = 88
+
+[tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
+
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+
+disallow_untyped_defs = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.isort]
+profile = "black"
+line_length = 88
